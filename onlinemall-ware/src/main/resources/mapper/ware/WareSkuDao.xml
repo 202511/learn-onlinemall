@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.own.onlinemall.ware.dao.WareSkuDao">
+
+    <resultMap type="com.own.onlinemall.ware.entity.WareSkuEntity" id="wareSkuMap">
+        <result property="id" column="id"/>
+        <result property="skuId" column="sku_id"/>
+        <result property="wareId" column="ware_id"/>
+        <result property="stock" column="stock"/>
+        <result property="skuName" column="sku_name"/>
+        <result property="stockLocked" column="stock_locked"/>
+    </resultMap>
+    <update id="lockSkuStock">
+        update wms_ware_sku set stock_locked= stock_locked +#{num} where sku_id=#{sku_id} and ware_id =#{aLong} and stock-stock_locked>#{num}
+    </update>
+    <update id="unlockStock">
+        update wms_ware_sku set stock_locked = stock_locked - #{num}
+        where sku_id= #{sku_id} and ware_id = #{ware_id}
+
+    </update>
+    <update id="updateTaskDetail">
+        update wms_ware_order_task_detail
+        set lock_status=2
+        where id = #{taskDetailId}
+    </update>
+    <select id="selectBySkuId" resultType="com.own.onlinemall.ware.entity.WareSkuEntity">
+        select *
+        from  wms_ware_sku
+        where sku_id=#{sku_id}
+    </select>
+    <select id="listWareIdHasSkuStock" resultType="java.lang.Long">
+        select ware_id from wms_ware_sku where sku_id =#{sku_id} and stock- stock_locked>0
+    </select>
+
+
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.own.onlinemall</groupId>
+    <artifactId>onlinemall</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>onlinemall</name>
+    <description>onlinemall</description>
+    <packaging>pom</packaging>
+    <modules>
+        <module>onlinemall-coupon</module>
+        <module>onlinemall-member</module>
+        <module>onlinemall-order</module>
+        <module>onlinemall-product</module>
+        <module>onlinemall-ware</module>
+        <module>renren-security-master</module>
+        <module>onlinemall-common</module>
+        <module>onlinemall-auth-server</module>
+        <module>onlinemall-search</module>
+        <module>onlinemall-seckill</module>
+        <module>onlinemall-third-party</module>
+        <module>onlinemall-cart</module>
+        <module>onlinemall-gateway</module>
+
+    </modules>
+</project>

@@ -1,0 +1,132 @@
+spring:
+  zipkin:
+    # zipkin服务器的地址
+    base-url: http://192.168.112.8:9411/
+    # 关闭服务发现，否则Springcloud会把zipkin当做服务名称
+    discovery-client-enabled: false
+    # 数据传输方式
+    sender:
+      type: web
+  sleuth:
+    sampler:
+      rate: 1
+
+
+  main:
+    allow-circular-references: true
+    web-application-type=reactive:
+  application:
+    name: onlinemall-gateway
+  cloud:
+    sentinel:
+      transport:
+        # 应用开启端口，接收dashboard限流规则，如果被占用会默认+1
+        port: 8719
+        # 控制台ip:port
+        dashboard: 127.0.0.1:8080
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+
+
+
+
+
+
+
+
+
+
+    gateway:
+      globalcors: # 全局的跨域处理
+        add-to-simple-url-handler-mapping: true # 解决options请求被拦截问题
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: # 允许哪些网站的跨域请求
+              - "http://localhost:8002"
+              - "http://localhost:8001"
+              -  "http://order.onlinemall.com"
+              -  "http://onlinemall.com"
+            allowedMethods: # 允许的跨域ajax的请求方式
+              - "GET"
+              - "POST"
+              - "DELETE"
+              - "PUT"
+              - "OPTIONS"
+            allowedHeaders: "*" # 允许在请求中携带的头信息
+            allowCredentials: true # 是否允许携带cookie
+            maxAge: 360000 #
+      discovery:
+        locator:
+          enabled: true #使用服务发现路由
+      routes:
+        - id: onlinemall-product
+          uri: lb://onlinemall-product
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+        - id: onlinemall-ware
+          uri: lb://onlinemall-ware
+          predicates:
+            - Path=/api/ware/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: onlinemall-third-party
+          uri: lb://onlinemall-third-party
+          predicates:
+            - Path=/api/third-party/**
+          filters:
+            - RewritePath=/api/third-party/(?<segment>.*),/$\{segment}
+
+        - id: onlinemall-admin
+          uri: lb://renren-security
+          predicates:
+            - Path=/api/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/renren-admin/$\{segment}
+
+
+
+
+
+        - id: onlinemall-host-router
+          uri: lb://onlinemall-product
+          predicates:
+            - Host=onlinemall.com,item.onlinemall.com
+
+        - id: onlinemall-search-router
+          uri: lb://onlinemall-search
+          predicates:
+            - Host=search.onlinemall.com
+
+        - id: onlinemall-auth-router
+          uri: lb://onlinemall-auth-server
+          predicates:
+            - Host=auth.onlinemall.com
+
+        - id: onlinemall-cart-router
+          uri: lb://onlinemall-cart
+          predicates:
+            - Host=cart.onlinemall.com
+
+        - id: onlinemall-order-router
+          uri: lb://onlinemall-order
+          predicates:
+            - Host=order.onlinemall.com
+
+        - id: onlinemall-member-router
+          uri: lb://onlinemall-member
+          predicates:
+            - Host=member.onlinemall.com
+
+        - id: onlinemall-seckill-router
+          uri: lb://onlinemall-seckill
+          predicates:
+            - Host=seckill.onlinemall.com
+
+
+server:
+  port: 88

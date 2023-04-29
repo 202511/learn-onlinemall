@@ -1,0 +1,39 @@
+spring:
+  zipkin:
+    # zipkin服务器的地址
+    base-url: http://192.168.112.8:9411/
+    # 关闭服务发现，否则Springcloud会把zipkin当做服务名称
+    discovery-client-enabled: false
+    # 数据传输方式
+    sender:
+      type: web
+  sleuth:
+    sampler:
+      rate: 1
+  main:
+    allow-circular-references: true
+  application:
+      name: onlinemall-third-party
+  cloud:
+    sentinel:
+          transport:
+            # 应用开启端口，接收dashboard限流规则，如果被占用会默认+1
+            port: 8719
+            # 控制台ip:port
+            dashboard: 127.0.0.1:8080
+    nacos:
+          discovery:
+            server-addr: 127.0.0.1:8848
+
+    alicloud:
+      access-key: "LTAI5tApdnt5yyF4FE5Yruqb"
+      secret-key: "mD17yDCAjnxioUCuIxH3AE9axsxbfD"
+      oss:
+        endpoint: "oss-cn-guangzhou.aliyuncs.com"
+server:
+  port: 30000
+management:
+  endpoints:
+    web:
+      exposure:
+        exclude: '*'
